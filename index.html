@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>U czy Ó? - Mistrz Ortografii</title>
+
+<style>
+
+*{
+    box-sizing:border-box;
+}
+
+body{
+    margin:0;
+    min-height:100vh;
+    font-family:'Trebuchet MS', sans-serif;
+    background:linear-gradient(135deg,#4facfe,#00f2fe);
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    padding:20px;
+}
+
+.container{
+    width:100%;
+    max-width:800px;
+    background:white;
+    border-radius:25px;
+    padding:30px;
+    box-shadow:0 10px 35px rgba(0,0,0,.2);
+    text-align:center;
+}
+
+h1{
+    color:#1e3a8a;
+    margin-top:0;
+}
+
+.progress-container{
+    width:100%;
+    height:20px;
+    background:#e5e7eb;
+    border-radius:20px;
+    overflow:hidden;
+    margin-bottom:20px;
+}
+
+.progress{
+    height:100%;
+    width:0%;
+    background:linear-gradient(90deg,#22c55e,#16a34a);
+    transition:.4s;
+}
+
+.score{
+    font-size:22px;
+    font-weight:bold;
+    color:#2563eb;
+}
+
+.word-card{
+    margin:30px auto;
+    padding:40px;
+    background:#f8fafc;
+    border-radius:20px;
+    border:4px solid #dbeafe;
+}
+
+.word{
+    font-size:56px;
+    font-weight:bold;
+    color:#1e293b;
+}
+
+.buttons{
+    display:flex;
+    justify-content:center;
+    gap:30px;
+    flex-wrap:wrap;
+}
+
+.choice{
+    width:180px;
+    height:120px;
+    border:none;
+    border-radius:20px;
+    font-size:48px;
+    font-weight:bold;
+    color:white;
+    cursor:pointer;
+    transition:.3s;
+}
+
+.choice:hover{
+    transform:scale(1.05);
+}
+
+.u{
+    background:#3b82f6;
+}
+
+.o{
+    background:#f59e0b;
+}
+
+.message{
+    min-height:50px;
+    margin-top:25px;
+    font-size:28px;
+    font-weight:bold;
+}
+
+.correct{
+    color:#16a34a;
+}
+
+.wrong{
+    color:#dc2626;
+}
+
+.stars{
+    margin-top:15px;
+    font-size:30px;
+}
+
+.final{
+    animation:show 1s;
+}
+
+@keyframes show{
+    from{
+        opacity:0;
+        transform:scale(.8);
+    }
+    to{
+        opacity:1;
+        transform:scale(1);
+    }
+}
+
+.medal{
+    font-size:90px;
+}
+
+.restart{
+    margin-top:20px;
+    background:#10b981;
+    color:white;
+    border:none;
+    padding:15px 30px;
+    border-radius:15px;
+    font-size:22px;
+    cursor:pointer;
+}
+
+</style>
+</head>
+<body>
+
+<div class="container">
+
+    <h1>🏆 U czy Ó? 🏆</h1>
+
+    <div class="progress-container">
+        <div id="progress" class="progress"></div>
+    </div>
+
+    <div class="score">
+        Punkty: <span id="score">0</span>
+    </div>
+
+    <div class="stars" id="stars"></div>
+
+    <div class="word-card">
+        <div class="word" id="word"></div>
+    </div>
+
+    <div class="buttons">
+        <button class="choice u" onclick="answer('u')">U</button>
+        <button class="choice o" onclick="answer('ó')">Ó</button>
+    </div>
+
+    <div class="message" id="message"></div>
+
+</div>
+
+<script>
+
+const words = [
+{word:"g..ra",answer:"ó"},
+{word:"m..cha",answer:"u"},
+{word:"wr..bel",answer:"ó"},
+{word:"chm..ra",answer:"u"},
+{word:"st..ł",answer:"ó"},
+{word:"k..rtka",answer:"u"},
+{word:"og..rek",answer:"ó"},
+{word:"b..rza",answer:"u"},
+{word:"kr..lik",answer:"ó"},
+{word:"p..dełko",answer:"u"},
+{word:"r..ża",answer:"ó"},
+{word:"ul",answer:"u"}
+];
+
+let current = 0;
+let score = 0;
+
+const wordEl = document.getElementById("word");
+const scoreEl = document.getElementById("score");
+const messageEl = document.getElementById("message");
+const starsEl = document.getElementById("stars");
+const progressEl = document.getElementById("progress");
+
+function loadWord(){
+
+    if(current >= words.length){
+        endGame();
+        return;
+    }
+
+    wordEl.textContent = words[current].word;
+
+    progressEl.style.width =
+        (current / words.length) * 100 + "%";
+}
+
+function answer(letter){
+
+    if(letter === words[current].answer){
+
+        score++;
+        scoreEl.textContent = score;
+
+        starsEl.innerHTML += "⭐";
+
+        messageEl.innerHTML =
+        "<span class='correct'>✅ Brawo!</span>";
+
+        current++;
+
+        setTimeout(()=>{
+            messageEl.textContent="";
+            loadWord();
+        },800);
+
+    } else {
+
+        messageEl.innerHTML =
+        "<span class='wrong'>❌ Spróbuj jeszcze raz!</span>";
+    }
+}
+
+function endGame(){
+
+document.querySelector(".container").innerHTML=
+`
+<div class="final">
+
+<div class="medal">🏅</div>
+
+<h1>Mistrz Ortografii!</h1>
+
+<h2>Twój wynik:</h2>
+
+<p style="font-size:42px;color:#2563eb;">
+${score} / ${words.length}
+</p>
+
+<p style="font-size:24px;">
+${score === words.length
+? "Fantastycznie! Wszystkie odpowiedzi poprawne!"
+: score >= words.length*0.75
+? "Bardzo dobrze!"
+: "Ćwicz dalej, będzie jeszcze lepiej!"}
+</p>
+
+<button class="restart"
+onclick="location.reload()">
+🔁 Zagraj ponownie
+</button>
+
+</div>
+`;
+}
+
+loadWord();
+
+</script>
+
+</body>
+</html>
