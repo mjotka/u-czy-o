@@ -245,8 +245,10 @@ if(letter === correct){
 const completedWord =
 words[current].word.replace("_", correct);
  
+// pokazanie całego poprawnego wyrazu
 wordEl.textContent = completedWord;
  
+// zielone podświetlenie
 wordEl.style.color = "#16a34a";
 wordEl.style.transform = "scale(1.2)";
  
@@ -269,7 +271,7 @@ messageEl.textContent = "";
  
 loadWord();
  
-},1500);
+}, 2000);
  
 } else {
  
@@ -277,14 +279,14 @@ wordEl.style.color = "#dc2626";
 wordEl.style.transform = "scale(1.1)";
  
 messageEl.innerHTML =
-"<span class='wrong'>❌ Spróbuj jeszcze raz!</span>";
+"<span class='wrong'>❌ Spróbuj jeszcze raz</span>";
  
 setTimeout(() => {
  
 wordEl.style.color = "#1e293b";
 wordEl.style.transform = "scale(1)";
  
-},600);
+}, 600);
 }
 }
 
