@@ -237,29 +237,55 @@ function loadWord(){
 }
 
 function answer(letter){
-
-    if(letter === words[current].answer){
-
-        score++;
-        scoreEl.textContent = score;
-
-        starsEl.innerHTML += "⭐";
-
-        messageEl.innerHTML =
-        "<span class='correct'>✅ Brawo!</span>";
-
-        current++;
-
-        setTimeout(()=>{
-            messageEl.textContent="";
-            loadWord();
-        },800);
-
-    } else {
-
-        messageEl.innerHTML =
-        "<span class='wrong'>❌ Spróbuj jeszcze raz!</span>";
-    }
+ 
+const correct = words[current].answer;
+ 
+if(letter === correct){
+ 
+const completedWord =
+words[current].word.replace("_", correct);
+ 
+wordEl.textContent = completedWord;
+ 
+wordEl.style.color = "#16a34a";
+wordEl.style.transform = "scale(1.2)";
+ 
+score++;
+scoreEl.textContent = score;
+ 
+starsEl.innerHTML += "⭐";
+ 
+messageEl.innerHTML =
+"<span class='correct'>✅ Brawo!</span>";
+ 
+current++;
+ 
+setTimeout(() => {
+ 
+wordEl.style.color = "#1e293b";
+wordEl.style.transform = "scale(1)";
+ 
+messageEl.textContent = "";
+ 
+loadWord();
+ 
+},1500);
+ 
+} else {
+ 
+wordEl.style.color = "#dc2626";
+wordEl.style.transform = "scale(1.1)";
+ 
+messageEl.innerHTML =
+"<span class='wrong'>❌ Spróbuj jeszcze raz!</span>";
+ 
+setTimeout(() => {
+ 
+wordEl.style.color = "#1e293b";
+wordEl.style.transform = "scale(1)";
+ 
+},600);
+}
 }
 
 function endGame(){
